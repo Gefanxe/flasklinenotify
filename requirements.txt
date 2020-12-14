@@ -1,0 +1,6 @@
+Flask==1.1.2
+requests==2.25.0
+python-dotenv==0.15.0
+PyMySQL==0.10.1
+lotify
+gunicorn
