@@ -25,16 +25,34 @@ SECRET = os.getenv("LINE_CLIENT_SECRET")
 URI = os.getenv("LINE_REDIRECT_URI")
 lotify = Client(client_id=CLIENT_ID, client_secret=SECRET, redirect_uri=URI)
 
-@app.before_first_request
-def before_first_request():
-    return ''
-
+# 給 cron-job.org 打的API, 為了不要讓heroku在指定時間內睡著
 @app.route('/')
 def hello_world():
     now = datetime.now()
     # print('env:', os.getenv("CLEARDB_DATABASE_USER"))
     return f'Hello, World! {now.strftime("%Y%m/%d %H:%M:%S")}'
 
+# 註冊頁
+@app.route("/register")
+def register():
+    link = lotify.get_auth_link(state=uuid.uuid4())
+    return render_template("register.html", auth_url=link)
+
+# 將通知人與UUID先存起來,待之後拿到Token對應起來放
+@app.route("/registerto", methods=["POST"])
+def registerto():
+    notifyUser = request.form.get("notifyUser")
+    userUuid = uuid.uuid4()
+    iid = 0
+    with conn.cursor() as cursor:
+        sql = "INSERT INTO notify_list(`notifyUser`, `uuid`, `regisDate`) VALUES(%s, %s, NOW())"
+        try:
+            cursor.execute(sql, (notifyUser, userUuid))
+            conn.commit()
+        except:
+            conn.rollback()
+        iid = cursor.lastrowid
+    return iid
 
 @app.route("/index")
 def home():
@@ -99,9 +117,11 @@ def revoke():
     return jsonify(result=response.get("message")), response.get("status")
 
 # 錯誤處理
+
+
 @app.errorhandler(Exception)
 def exception_handler(error):
-    return "!!!!"  + repr(error)
+    return "!!!!" + repr(error)
 
 # if __name__ == "__main__":
 #     app.run(host="0.0.0.0", port=5000)

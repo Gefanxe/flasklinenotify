@@ -27,10 +27,32 @@ def hello_world():
     return f'Hello, World! {now.strftime("%Y%m/%d %H:%M:%S")}'
 
 
-@app.route('/insertone')
-def insertone():
-    myVar = 'sql insert'
-    return f'insertone! {myVar}'
+@app.route('/resjson', methods=["POST"])
+def resjson():
+    data = {
+        "id": 1,
+        "name": "Andersen"
+    }
+    return jsonify(data)
+
+
+@app.route('/test')
+def test():
+    return f'{uuid.uuid4()}'
+
+
+@app.route('/testform')
+def testform():
+    return render_template("testform.html")
+
+
+@app.route('/testformto', methods=["POST"])
+def testformto():
+
+    print('payload', request.form)
+    form = request.form
+    uname = form['uname']  # or: request.form.get('uname')
+    return f'data is: {uname}'
 
 
 @app.route('/selectone')
@@ -43,6 +65,22 @@ def selectone():
     return jsonify(result)
 
 
+@app.route("/insertone/<uname>/<utel>")
+def insertone(uname, utel):
+    iid = 0
+    with conn.cursor() as cursor:
+        sql = "INSERT INTO friends(`name`, `tel`) VALUES(%s, %s)"
+        try:
+            cursor.execute(sql, (uname, utel))
+            conn.commit()
+        except:
+            print('insert fail')
+            conn.rollback()
+        print('sql str:', cursor._last_executed)
+        iid = cursor.lastrowid
+    return f'{iid}'
+
+
 @app.route('/redirect')
 def url_redirect():
     google = 'https://www.google.com.tw/search?sxsrf=ALeKk03lPH3tlko-TOzlVHn4KtLcf6Je4g%3A1607906661711&source=hp&ei=ZbXWX7CjKcWlmAXDl6Jo&q=%E8%96%A9%E7%88%BE%E9%81%94%E7%84%A1%E9%9B%99%E7%81%BD%E5%8E%84%E5%95%9F%E7%A4%BA%E9%8C%84&oq=&gs_lcp=CgZwc3ktYWIQAxgIMgcIIxDqAhAnMgcIIxDqAhAnMgcIIxDqAhAnMgcIIxDqAhAnMgcIIxDqAhAnMgcIIxDqAhAnMgcIIxDqAhAnMgcIIxDqAhAnMgcIIxDqAhAnMgcIIxDqAhAnUABYAGChtApoAXAAeACAAQCIAQCSAQCYAQCqAQdnd3Mtd2l6sAEK&sclient=psy-ab'
@@ -53,3 +91,6 @@ def url_redirect():
 #     app.run(host="0.0.0.0", port=5000)
 
 # sql 查詢
+def sql_select(sql):
+
+    return ""

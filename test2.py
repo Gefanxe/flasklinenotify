@@ -9,7 +9,15 @@
 
 # print('vavavar2', vavavar)
 
-if True:
-    test="good"
+# if True:
+#     test="good"
 
-print('test', test)
+# print('test', test)
+
+import json
+data = {
+    "id": 1,
+    "name": "Andersen"
+}
+jsonData = json.dumps(data)
+print(jsonData)
