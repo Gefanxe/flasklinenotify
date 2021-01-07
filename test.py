@@ -43,7 +43,8 @@ def test():
 
 @app.route('/testform')
 def testform():
-    return render_template("testform.html")
+    title = "測試表單"
+    return render_template("testform.html", htmlTitle=title)
 
 
 @app.route('/testformto', methods=["POST"])
@@ -80,6 +81,20 @@ def insertone(uname, utel):
         iid = cursor.lastrowid
     return f'{iid}'
 
+@app.route("/updateone/<token>/<uuid>")
+def updateone(token, uuid):
+    iid = 0
+    with conn.cursor() as cursor:
+        sql = "UPDATE notify_list SET token = %s WHERE uuid = %s"
+        try:
+            cursor.execute(sql, (token, uuid))
+            conn.commit()
+        except:
+            print('update fail')
+            conn.rollback()
+        print('sql str:', cursor._last_executed)
+        affected_rows = cursor.rowcount
+    return f'{affected_rows}'
 
 @app.route('/redirect')
 def url_redirect():

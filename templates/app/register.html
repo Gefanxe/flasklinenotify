@@ -1,0 +1,19 @@
+{% extends "app/main_layout.html" %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+    <main role="main" class="container">
+        <form name="regisForm" method="POST" action="/registerto">
+            <fieldset>
+                <legend>註冊資訊</legend>
+                <div class="form-group col-md-4">
+                    <label for="notifyName">通知對象</label>
+                    <input type="text" class="form-control" name="notifyUser" id="notifyUser" placeholder="請輸入稱呼">
+                </div>
+                <button type="submit" class="btn btn-primary">送出</button>
+            </fieldset>
+        </form>
+    </main>
+{% endblock content %}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{htmlTitle}}</title>
+    {% block head %}
+    {% endblock head %}
+</head>
+<body>
+    {% include "test_header.html" %}
+    {% block content %}
+    {% endblock content %}
+    {% include "test_footer.html" ignore missing %}
+</body>
+</html>

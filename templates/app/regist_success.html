@@ -1,0 +1,27 @@
+{% extends "app/main_layout.html" %}
+
+{% block head %}
+<script>
+    $(function () {
+        $('#revoke').on('click', function () {
+            fetch('/lnrevoke', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: '{{userToken}}' }),
+            }).then(res => {
+                return res.json();
+            }).then(res => {
+                console.log('res:', res)
+            });
+        });
+    });
+</script>
+{% endblock head %}
+
+{% block content %}
+<main role="main" class="container">
+    <div id="result">註冊成功</div>
+    <button id="revoke" class="btn btn-danger">註銷 token</button>
+
+</main>
+{% endblock content %}

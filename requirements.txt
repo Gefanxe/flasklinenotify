@@ -4,3 +4,5 @@ python-dotenv==0.15.0
 PyMySQL==0.10.1
 lotify
 gunicorn
+asyncio
+aiohttp
